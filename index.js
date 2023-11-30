@@ -60,6 +60,19 @@ app.get("/contacts", (req, res) => {
   res.json(contactsData);
 });
 
+// get one contact
+app.get("/contacts/:id", (req, res) => {
+  const id = req.params.id;
+  let contact = {};
+  for (let i = 0; i < contactsData.length; i++) {
+    if (contactsData[i].id == id) {
+      contact = contactsData[i];
+      break;
+    }
+  }
+  res.json(contact);
+});
+
 // get all history
 app.get("/history", (req, res) => {
   res.json(historyData);
