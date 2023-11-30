@@ -68,6 +68,38 @@ const historyData = [
   // Add more contacts as needed
 ];
 
+const _backup = [
+  {
+    id: 1,
+    name: "John Doe",
+    phone: "0935366008",
+    avatar:
+      "https://s3.cloud.cmctelecom.vn/tinhte2/2020/09/5136156_IMG_20200902_023158.jpg",
+  },
+  {
+    id: 2,
+    name: "Jack Cusion",
+    phone: "0935366008",
+    avatar:
+      "https://s3.cloud.cmctelecom.vn/tinhte2/2020/09/5136156_IMG_20200902_023158.jpg",
+  },
+  {
+    id: 3,
+    name: "Hieu Duong",
+    phone: "0935366008",
+    avatar:
+      "https://s3.cloud.cmctelecom.vn/tinhte2/2020/09/5136156_IMG_20200902_023158.jpg",
+  },
+  {
+    id: 4,
+    name: "Duy Bao",
+    phone: "0935366008",
+    avatar:
+      "https://s3.cloud.cmctelecom.vn/tinhte2/2020/09/5136156_IMG_20200902_023158.jpg",
+  },
+  // Add more contacts as needed
+];
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -197,6 +229,24 @@ app.delete("/contacts/:id", (req, res) => {
     resObj.message = typeMessage.succcess;
     resObj.data = contactsData;
 
+    res.json(resObj);
+  } catch (error) {
+    const resObj = resposeObject;
+    resObj.status = typeStatus.error;
+    resObj.message = typeMessage.error;
+    resObj.data = null;
+    res.json(resObj);
+  }
+});
+
+// reset data
+app.get("/reset", (req, res) => {
+  try {
+    contactsData = _backup;
+    const resObj = resposeObject;
+    resObj.status = typeStatus.success;
+    resObj.message = typeMessage.succcess;
+    resObj.data = contactsData;
     res.json(resObj);
   } catch (error) {
     const resObj = resposeObject;
