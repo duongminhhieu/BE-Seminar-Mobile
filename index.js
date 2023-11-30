@@ -55,15 +55,32 @@ const historyData = [
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// get all contact
 app.get("/contacts", (req, res) => {
   res.json(contactsData);
 });
 
+// get all history
 app.get("/history", (req, res) => {
   res.json(historyData);
 });
 
-app.post("/contacts/:id", (req, res) => {
+// create contact
+app.post("/contacts", (req, res) => {
+  const data = req.body;
+  const id = contactsData.length + 1;
+  const newContact = {
+    id: id,
+    name: data.name,
+    phone: data.phone,
+    avatar: data.avatar,
+  };
+  contactsData.push(newContact);
+  res.json(contactsData);
+});
+
+// update contact
+app.put("/contacts/:id", (req, res) => {
   const id = req.params.id;
   const newContact = req.body;
   for (let i = 0; i < contactsData.length; i++) {
@@ -75,6 +92,7 @@ app.post("/contacts/:id", (req, res) => {
   res.json(contactsData);
 });
 
+// delete contact
 app.delete("/contacts/:id", (req, res) => {
   const id = req.params.id;
   for (let i = 0; i < contactsData.length; i++) {
