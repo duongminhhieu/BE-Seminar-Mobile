@@ -2,6 +2,22 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
 
+const typeMessage = {
+  succcess: "success",
+  error: "error",
+};
+
+const typeStatus = {
+  success: 200,
+  error: 500,
+};
+
+const resposeObject = {
+  status: 200,
+  message: "Success",
+  data: null,
+};
+
 const contactsData = [
   {
     id: 1,
@@ -57,64 +73,138 @@ app.use(express.urlencoded({ extended: true }));
 
 // get all contact
 app.get("/contacts", (req, res) => {
-  res.json(contactsData);
+  try {
+    const resObj = resposeObject;
+    resObj.status = typeStatus.success;
+    resObj.message = typeMessage.succcess;
+    resObj.data = contactsData;
+    res.json(resObj);
+  } catch (error) {
+    const resObj = resposeObject;
+    resObj.status = typeStatus.error;
+    resObj.message = typeMessage.error;
+    resObj.data = null;
+    res.json(resObj);
+  }
 });
 
 // get one contact
 app.get("/contacts/:id", (req, res) => {
-  const id = req.params.id;
-  let contact = {};
-  for (let i = 0; i < contactsData.length; i++) {
-    if (contactsData[i].id == id) {
-      contact = contactsData[i];
-      break;
+  try {
+    const id = req.params.id;
+    let contact = {};
+    for (let i = 0; i < contactsData.length; i++) {
+      if (contactsData[i].id == id) {
+        contact = contactsData[i];
+        break;
+      }
     }
+
+    const resObj = resposeObject;
+    resObj.status = typeStatus.success;
+    resObj.message = typeMessage.succcess;
+    resObj.data = contact;
+    res.json(resObj);
+  } catch (error) {
+    const resObj = resposeObject;
+    resObj.status = typeStatus.error;
+    resObj.message = typeMessage.error;
+    resObj.data = null;
+    res.json(resObj);
   }
-  res.json(contact);
 });
 
 // get all history
 app.get("/history", (req, res) => {
-  res.json(historyData);
+  try {
+    const resObj = resposeObject;
+    resObj.status = typeStatus.success;
+    resObj.message = typeMessage.succcess;
+    resObj.data = historyData;
+    res.json(resObj);
+  } catch (error) {
+    const resObj = resposeObject;
+    resObj.status = typeStatus.error;
+    resObj.message = typeMessage.error;
+    resObj.data = null;
+    res.json(resObj);
+  }
 });
 
 // create contact
 app.post("/contacts", (req, res) => {
-  const data = req.body;
-  const id = contactsData.length + 1;
-  const newContact = {
-    id: id,
-    name: data.name,
-    phone: data.phone,
-    avatar: data.avatar,
-  };
-  contactsData.push(newContact);
-  res.json(contactsData);
+  try {
+    const data = req.body;
+    const id = contactsData.length + 1;
+    const newContact = {
+      id: id,
+      name: data.name,
+      phone: data.phone,
+      avatar: data.avatar,
+    };
+    contactsData.push(newContact);
+    const resObj = resposeObject;
+    resObj.status = typeStatus.success;
+    resObj.message = typeMessage.succcess;
+    resObj.data = contactsData;
+    res.json(resObj);
+  } catch (error) {
+    const resObj = resposeObject;
+    resObj.status = typeStatus.error;
+    resObj.message = typeMessage.error;
+    resObj.data = null;
+    res.json(resObj);
+  }
 });
 
 // update contact
 app.put("/contacts/:id", (req, res) => {
-  const id = req.params.id;
-  const newContact = req.body;
-  for (let i = 0; i < contactsData.length; i++) {
-    if (contactsData[i].id == id) {
-      contactsData[i] = newContact;
-      break;
+  try {
+    const id = req.params.id;
+    const newContact = req.body;
+    for (let i = 0; i < contactsData.length; i++) {
+      if (contactsData[i].id == id) {
+        contactsData[i] = newContact;
+        break;
+      }
     }
+    const resObj = resposeObject;
+    resObj.status = typeStatus.success;
+    resObj.message = typeMessage.succcess;
+    resObj.data = contactsData;
+    res.json(resObj);
+  } catch (error) {
+    const resObj = resposeObject;
+    resObj.status = typeStatus.error;
+    resObj.message = typeMessage.error;
+    resObj.data = null;
+    res.json(resObj);
   }
-  res.json(contactsData);
 });
 
 // delete contact
 app.delete("/contacts/:id", (req, res) => {
-  const id = req.params.id;
-  for (let i = 0; i < contactsData.length; i++) {
-    if (contactsData[i].id == id) {
-      contactsData.splice(i, 1);
-      break;
+  try {
+    const id = req.params.id;
+    for (let i = 0; i < contactsData.length; i++) {
+      if (contactsData[i].id == id) {
+        contactsData.splice(i, 1);
+        break;
+      }
     }
+    const resObj = resposeObject;
+    resObj.status = typeStatus.success;
+    resObj.message = typeMessage.succcess;
+    resObj.data = contactsData;
+
+    res.json(resObj);
+  } catch (error) {
+    const resObj = resposeObject;
+    resObj.status = typeStatus.error;
+    resObj.message = typeMessage.error;
+    resObj.data = null;
+    res.json(resObj);
   }
-  res.json(contactsData);
 });
 
 app.listen(port, () => {
