@@ -18,7 +18,7 @@ const resposeObject = {
   data: null,
 };
 
-const contactsData = [
+var contactsData = [
   {
     id: 1,
     name: "John Doe",
@@ -50,7 +50,7 @@ const contactsData = [
   // Add more contacts as needed
 ];
 
-const historyData = [
+var historyData = [
   {
     id: "1",
     name: "John Doe",
@@ -68,7 +68,7 @@ const historyData = [
   // Add more contacts as needed
 ];
 
-const _backup = [
+var _backup = [
   {
     id: 1,
     name: "John Doe",
