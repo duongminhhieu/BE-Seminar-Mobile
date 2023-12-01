@@ -53,19 +53,18 @@ var contactsData = [
 var historyData = [
   {
     id: "1",
-    name: "John Doe",
+    phone: "0812301805",
     time: "22/11/2022",
     avatar:
       "https://s3.cloud.cmctelecom.vn/tinhte2/2020/09/5136156_IMG_20200902_023158.jpg",
   },
   {
     id: "2",
-    name: "Joshep",
+    phone: "0825797938",
     time: "22/11/2022",
     avatar:
       "https://s3.cloud.cmctelecom.vn/tinhte2/2020/09/5136156_IMG_20200902_023158.jpg",
   },
-  // Add more contacts as needed
 ];
 
 var backup = [
