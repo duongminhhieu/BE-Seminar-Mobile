@@ -54,6 +54,7 @@ var historyData = [
   {
     id: "1",
     phone: "0812301805",
+    name: "",
     time: "22/11/2022",
     avatar:
       "https://s3.cloud.cmctelecom.vn/tinhte2/2020/09/5136156_IMG_20200902_023158.jpg",
@@ -61,13 +62,14 @@ var historyData = [
   {
     id: "2",
     phone: "0825797938",
+    name: "",
     time: "22/11/2022",
     avatar:
       "https://s3.cloud.cmctelecom.vn/tinhte2/2020/09/5136156_IMG_20200902_023158.jpg",
   },
 ];
 
-var backup = [
+var backupContact = [
   {
     id: 1,
     name: "John 100 củ",
@@ -97,6 +99,25 @@ var backup = [
       "https://upload.wikimedia.org/wikipedia/commons/f/fe/Son_Tung_M-TP_1_%282017%29.png",
   },
   // Add more contacts as needed
+];
+
+var backupHistory = [
+  {
+    id: "1",
+    phone: "0812301805",
+    name: "",
+    time: "22/11/2022",
+    avatar:
+      "https://s3.cloud.cmctelecom.vn/tinhte2/2020/09/5136156_IMG_20200902_023158.jpg",
+  },
+  {
+    id: "2",
+    phone: "0825797938",
+    name: "",
+    time: "22/11/2022",
+    avatar:
+      "https://s3.cloud.cmctelecom.vn/tinhte2/2020/09/5136156_IMG_20200902_023158.jpg",
+  },
 ];
 
 app.use(express.json());
@@ -213,6 +234,31 @@ app.put("/contacts/:id", (req, res) => {
   }
 });
 
+// update contact
+app.put("/history/:id", (req, res) => {
+  try {
+    const id = req.params.id;
+    const newHistory = req.body;
+    for (let i = 0; i < historyData.length; i++) {
+      if (historyData[i].id == id) {
+        historyData[i].name = newHistory.name;
+        break;
+      }
+    }
+    const resObj = resposeObject;
+    resObj.status = typeStatus.success;
+    resObj.message = typeMessage.succcess;
+    resObj.data = historyData;
+    res.json(resObj);
+  } catch (error) {
+    const resObj = resposeObject;
+    resObj.status = typeStatus.error;
+    resObj.message = typeMessage.error;
+    resObj.data = null;
+    res.json(resObj);
+  }
+});
+
 // delete contact
 app.delete("/contacts/:id", (req, res) => {
   try {
@@ -239,13 +285,31 @@ app.delete("/contacts/:id", (req, res) => {
 });
 
 // reset data
-app.get("/reset", (req, res) => {
+app.get("/backup/contact", (req, res) => {
   try {
-    contactsData = backup;
+    contactsData = backupContact;
     const resObj = resposeObject;
     resObj.status = typeStatus.success;
     resObj.message = typeMessage.succcess;
     resObj.data = contactsData;
+    res.json(resObj);
+  } catch (error) {
+    const resObj = resposeObject;
+    resObj.status = typeStatus.error;
+    resObj.message = typeMessage.error;
+    resObj.data = null;
+    res.json(resObj);
+  }
+});
+
+// reset data
+app.get("/backup/history", (req, res) => {
+  try {
+    historyData = backupHistory;
+    const resObj = resposeObject;
+    resObj.status = typeStatus.success;
+    resObj.message = typeMessage.succcess;
+    resObj.data = historyData;
     res.json(resObj);
   } catch (error) {
     const resObj = resposeObject;
