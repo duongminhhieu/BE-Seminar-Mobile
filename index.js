@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3005;
+const axios = require("axios");
 
 const typeMessage = {
   succcess: "success",
@@ -318,6 +319,14 @@ app.get("/backup/history", (req, res) => {
     resObj.data = null;
     res.json(resObj);
   }
+});
+
+// get data scholar
+app.get("/scholar", async (req, res) => {
+  var url = req.query.q;
+
+  const response = await axios.get(url);
+  return res.send(response.data);
 });
 
 app.listen(port, () => {
