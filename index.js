@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 3005;
 const axios = require("axios");
+const cheerio = require("cheerio");
 
 const typeMessage = {
   succcess: "success",
@@ -321,14 +322,80 @@ app.get("/backup/history", (req, res) => {
   }
 });
 
-// get data scholar
+// Middleware để cho phép CORS (nếu cần)
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
+
+// Route để lấy dữ liệu từ Google Scholar
 app.get("/scholar", async (req, res) => {
   var url = req.query.q;
 
-  const response = await axios.get(url);
-  return res.send(response.data);
+  try {
+    // Gửi yêu cầu đến trang web và lấy nội dung HTML
+    const response = await axios.get(url);
+    const htmlContent = response.data;
+
+    // Sử dụng Cheerio để phân tích nội dung HTML
+    const $ = cheerio.load(htmlContent);
+
+    // Chọn tất cả các tài nguyên liên quan và thay đổi đường dẫn để truy cập thông qua API của server
+    $("script").each((index, element) => {
+      const scriptSrc = $(element).attr("src");
+      if (scriptSrc) {
+        $(element).attr(
+          "src",
+          `/resource?url=${encodeURIComponent(scriptSrc)}`
+        );
+      }
+    });
+
+    $('link[rel="stylesheet"]').each((index, element) => {
+      const styleHref = $(element).attr("href");
+      if (styleHref) {
+        $(element).attr(
+          "href",
+          `/resource?url=${encodeURIComponent(styleHref)}`
+        );
+      }
+    });
+
+    $("img").each((index, element) => {
+      const imgSrc = $(element).attr("src");
+      if (imgSrc) {
+        $(element).attr("src", `/resource?url=${encodeURIComponent(imgSrc)}`);
+      }
+    });
+
+    // Trả về nội dung đã được sửa đổi
+    return res.send($.html());
+  } catch (error) {
+    console.error("Error:", error.message);
+    return res.status(500).send("Internal Server Error");
+  }
+});
+
+// Route để lấy tài nguyên từ trang web
+app.get("/resource", async (req, res) => {
+  const resourceUrl = decodeURIComponent(req.query.url);
+
+  try {
+    // Gửi yêu cầu đến trang web để lấy tài nguyên
+    const resourceResponse = await axios.get(resourceUrl, {
+      responseType: "arraybuffer",
+    });
+
+    // Chuyển tài nguyên về dạng binary và trả về
+    const buffer = Buffer.from(resourceResponse.data, "binary");
+    res.type(resourceResponse.headers["content-type"]);
+    res.send(buffer);
+  } catch (error) {
+    console.error("Error fetching resource:", error.message);
+    return res.status(500).send("Internal Server Error");
+  }
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
