@@ -351,7 +351,18 @@ app.get("/scholar", async (req, res) => {
   var url = req.query.q;
 
   try {
-    const response = await axios.get(url);
+    const response = await axios.get(url, {
+      proxy: {
+        protocol: "http",
+        host: "proxy.scrapingbee.com",
+        port: 8886,
+        auth: {
+          username:
+            "478JLMBMG9WPJGXL7R5TGWMW7W1Q91U3XKGFFLS6BMLBU4UIUNQDLDAZ4FO71HKT5FPFW3VG3654A20D",
+          password: "render_js=False&premium_proxy=True",
+        },
+      },
+    });
     return res.send(response.data);
   } catch (error) {
     console.log(error);
