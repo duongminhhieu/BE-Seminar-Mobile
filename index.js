@@ -321,12 +321,44 @@ app.get("/backup/history", (req, res) => {
   }
 });
 
+// An array of 10 proxies
+const proxy_list = [
+  {
+    protocol: "http",
+    host: "12.186.205.123",
+    port: 80,
+  },
+  {
+    protocol: "http",
+    host: "198.58.106.30",
+    port: 8085,
+  },
+  {
+    protocol: "http",
+    host: "51.38.191.151",
+    port: 80,
+  },
+  {
+    protocol: "http",
+    host: "199.229.254.129",
+    port: 4145,
+  },
+  {
+    protocol: "http",
+    host: "163.172.85.30",
+    port: 80,
+  },
+];
+let random_index = Math.floor(Math.random() * proxy_list.length);
+
 // get data scholar
 app.get("/scholar", async (req, res) => {
   var url = req.query.q;
 
   try {
-    const response = await axios.get(url);
+    const response = await axios.get(url, {
+      proxy: proxy_list[random_index],
+    });
     return res.send(response.data);
   } catch (error) {
     console.log(error);
