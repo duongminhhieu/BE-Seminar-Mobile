@@ -325,8 +325,13 @@ app.get("/backup/history", (req, res) => {
 app.get("/scholar", async (req, res) => {
   var url = req.query.q;
 
-  const response = await axios.get(url);
-  return res.send(response.data);
+  try {
+    const response = await axios.get(url);
+    return res.send(response.data);
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+  }
 });
 
 app.listen(port, () => {
